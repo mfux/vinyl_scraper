@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 import re
 import io
 from pathlib import Path
+from time import sleep
 
 
 def next_page(text):
@@ -76,5 +77,8 @@ def main(download_dir, start_url, end_url):
             # edit downloaded song info
             song_info["Album"] = dj_title
             write_info(song_info, download_path)
+
+        # throttle requests
+        sleep(1)
 
     return "hello world"
