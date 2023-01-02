@@ -65,4 +65,5 @@ def write_info(info, tfn, jpeg=False):
     audiofile.tag.title = get_title(info)
     audiofile.tag.track_num = info["Number"]
     audiofile.tag.album = info["Album"]
+    audiofile.tag.album_artist = info["Album"]
     audiofile.tag.save()
