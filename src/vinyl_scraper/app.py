@@ -24,7 +24,7 @@ def post(text, soup):
     return div
 
 
-def iterate_blog_pages(start_url, max_pages=10):
+def iterate_blog_pages(start_url, end_url, max_pages=10):
     # load data
     def text_soup(url):
         r = requests.get(url)
@@ -37,6 +37,8 @@ def iterate_blog_pages(start_url, max_pages=10):
     yield {"url": start_url, "text": text, "soup": soup}
     # loop over pages
     for i in range(max_pages):
+        if url == end_url:
+            break
         url = next_page(text)
         text, soup = text_soup(url)
         yield {"url": url, "text": text, "soup": soup}
@@ -59,9 +61,9 @@ def download_song(song_info: dict, download_dir: Path) -> Path:
     return info, download_path
 
 
-def main(download_dir, start_url):
+def main(download_dir, start_url, end_url):
     # for each page
-    for page in iterate_blog_pages(start_url):
+    for page in iterate_blog_pages(start_url, end_url):
 
         # get dj title
         dj_title = get_album(page["url"])
@@ -69,13 +71,12 @@ def main(download_dir, start_url):
         # for song in page
         for song_info in get_song_infos(page):
             # download song
-            song_info["yt_info"], download_path = download_song(song_info, download_dir)
-
-            # edit song info
-            song_info["Album"] = dj_title
-            write_info(song_info, download_path)
+            song_info["yt_info"], download_path = download_song(
+                song_info, Path(download_dir)
+            )
 
             # edit downloaded song info
-            print("hi")
+            song_info["Album"] = dj_title
+            write_info(song_info, download_path)
 
     return "hello world"

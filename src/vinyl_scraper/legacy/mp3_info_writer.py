@@ -1,6 +1,7 @@
 import eyed3
 import urllib.request
 from subprocess import check_output
+from pathlib import Path
 
 
 def get_img(link, tfn):
@@ -47,6 +48,7 @@ def get_title(info):
 def write_info(info, tfn, jpeg=False):
     filetype = info["Image"].split(".")[-1]
     img_tfn = "img/" + info["Description"] + "." + filetype
+    img_tfn = Path(img_tfn).resolve()
     try:
         get_img(info["Image"], img_tfn)
         r = check_output(

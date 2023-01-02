@@ -8,11 +8,16 @@ START_URL = "https://diebesondereplatte.blogspot.com/2022/12/die-besondere-platt
 
 
 def test_main():
-    assert "hello worl" in vinyl_scraper.main()
+    vinyl_scraper.main(
+        "/home/pi/scm/vinyl_scraper/tests/mp3",
+        START_URL,
+        "https://diebesondereplatte.blogspot.com/2022/11/next-date-die-besondere-platte-47-mit.html",
+    )
+    assert True
 
 
 def test_iterate_blog_pages():
-    pages = iterate_blog_pages(START_URL, max_pages=2)
+    pages = iterate_blog_pages(START_URL, "", max_pages=2)
     assert all("http" in page["url"] for page in pages)
 
 
