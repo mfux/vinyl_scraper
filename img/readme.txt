@@ -1,0 +1,1 @@
+folder to cache cover art images
