@@ -7,8 +7,6 @@ import re
 import io
 from pathlib import Path
 
-START_URL = "https://diebesondereplatte.blogspot.com/2022/12/die-besondere-platte-48-mit-simon-dorken.html"
-
 
 def next_page(text):
     """This extract the "Older" post"""
@@ -61,9 +59,9 @@ def download_song(song_info: dict, download_dir: Path) -> Path:
     return info, download_path
 
 
-def main(download_dir):
+def main(download_dir, start_url):
     # for each page
-    for page in iterate_blog_pages(START_URL):
+    for page in iterate_blog_pages(start_url):
 
         # get dj title
         dj_title = get_album(page["url"])
@@ -71,9 +69,11 @@ def main(download_dir):
         # for song in page
         for song_info in get_song_infos(page):
             # download song
-            yt_info, download_path = download_song(song_info, download_dir)
+            song_info["yt_info"], download_path = download_song(song_info, download_dir)
 
-            # download album art
+            # edit song info
+            song_info["Album"] = dj_title
+            write_info(song_info, download_path)
 
             # edit downloaded song info
             print("hi")
