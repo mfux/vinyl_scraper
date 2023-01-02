@@ -13,7 +13,7 @@ def get_description_and_number(a):
             while element[i] != ".":
                 i += 1
                 if i >= len(element):
-                    i=0
+                    i = 0
                     break
             n = element[:i].strip()
             try:
@@ -21,7 +21,12 @@ def get_description_and_number(a):
             except ValueError:
                 num = 27
             valid_schars = ["–", "-", " ", "(", ")"]
-            return [''.join(e for e in element[i+1:] if e.isalnum() or e in valid_schars).strip().replace("–", "-"), num]
+            return [
+                "".join(e for e in element[i + 1 :] if e.isalnum() or e in valid_schars)
+                .strip()
+                .replace("–", "-"),
+                num,
+            ]
     return "no-description"
 
 
@@ -33,19 +38,16 @@ def get_img(a):
     return a.find_previous(lambda tag: tag.has_attr("href")).get("href")
 
 
-def extract_infos(html_file):
-    soup = BeautifulSoup(html_file.read(), 'lxml')
-    listen_as = [tag for tag in soup.find_all('a') if has_listen(tag)]
+def extract_infos(soup):
+    listen_as = [tag for tag in soup.find_all("a") if has_listen(tag)]
     infos = []
     for a in listen_as:
-        info = {"Description": get_description_and_number(a)[0],
-                "Number": get_description_and_number(a)[1],
-                "Link": get_link(a),
-                "Image": get_img(a)}
+        info = {
+            "Description": get_description_and_number(a)[0],
+            "Number": get_description_and_number(a)[1],
+            "Link": get_link(a),
+            "Image": get_img(a),
+        }
         infos.append(info)
     result = infos
     return result
-
-
-
-
