@@ -18,9 +18,12 @@ def get_artist(info):
 
     # extract artist from description
     d = info["Description"]
-    d = ''.join([char for char in d[:4] if char not in ["."] and not char.isdigit()] + list(d)[4:])
+    d = "".join(
+        [char for char in d[:4] if char not in ["."] and not char.isdigit()]
+        + list(d)[4:]
+    )
     d = d.strip()
-    artist = d.split('-')[0].strip()
+    artist = d.split("-")[0].strip()
     return artist
 
 
@@ -32,9 +35,12 @@ def get_title(info):
         pass
     # extract artist from description
     d = info["Description"]
-    d = ''.join([char for char in d[:4] if char not in ["."] and not char.isdigit()] + list(d)[4:])
+    d = "".join(
+        [char for char in d[:4] if char not in ["."] and not char.isdigit()]
+        + list(d)[4:]
+    )
     d = d.strip()
-    artist = d.split('-')[1].strip()
+    artist = d.split("-")[1].strip()
     return artist
 
 
