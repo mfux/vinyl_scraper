@@ -28,10 +28,10 @@ def test_download():
     ][0][0]
 
     # clean test download dir
-    test_download_dir = Path("/Users/mfuchs/scm/vinyl_scraper/tests/mp3")
+    test_download_dir = Path("/home/pi/scm/vinyl_scraper/tests/mp3")
     if test_download_dir.exists():
         shutil.rmtree(test_download_dir)
     test_download_dir.mkdir()
 
-    info = download_song(song_info, test_download_dir)
-    assert True
+    info, test_download_path = download_song(song_info, test_download_dir)
+    assert test_download_path.exists()

@@ -1,5 +1,6 @@
 from vinyl_scraper.legacy import link_extractor, yt_mp3_downloader
 from vinyl_scraper.legacy.dbpextract import get_album
+from vinyl_scraper.legacy.mp3_info_writer import write_info
 import requests
 from bs4 import BeautifulSoup
 import re
@@ -47,21 +48,20 @@ def get_song_infos(page):
     return link_extractor.extract_infos(post(page["text"], page["soup"]))
 
 
-def download_song(song_info, download_dir):
-    path = Path(download_dir)
+def download_song(song_info: dict, download_dir: Path) -> Path:
 
-    download_path = lambda si: download_dir / si["Description"].replace("/", " ")
+    download_path = download_dir / song_info["Description"].replace("/", " ")
 
-    # info = yt_mp3_downloader.download(song_info["Link"], str(download_path(song_info)))
+    # download_path = yt_mp3_downloader.download(song_info["Link"], str(download_path(song_info)))
 
-    info = yt_mp3_downloader.download(
-        "https://www.youtube.com/watch?v=tPEE9ZwTmy0", str(download_path(song_info))
+    info, download_path = yt_mp3_downloader.download(
+        "https://www.youtube.com/watch?v=tPEE9ZwTmy0", str(download_path)
     )
 
-    return download_path + ".mp3"
+    return info, download_path
 
 
-def main():
+def main(download_dir):
     # for each page
     for page in iterate_blog_pages(START_URL):
 
@@ -71,8 +71,7 @@ def main():
         # for song in page
         for song_info in get_song_infos(page):
             # download song
-
-            # determine download path
+            yt_info, download_path = download_song(song_info, download_dir)
 
             # download album art
 
