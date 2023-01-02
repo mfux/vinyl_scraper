@@ -14,9 +14,9 @@ import io
 import re
 from bs4 import BeautifulSoup
 from time import sleep
-from link_extractor import extract_infos
+from vinyl_scraper.legacy.link_extractor import extract_infos
 from vinyl_scraper.legacy.yt_mp3_downloader import download
-from mp3_info_writer import write_info
+from vinyl_scraper.legacy.mp3_info_writer import write_info
 import os
 from pathlib import Path
 
