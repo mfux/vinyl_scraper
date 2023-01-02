@@ -7,6 +7,49 @@ import re
 import io
 from pathlib import Path
 from time import sleep
+import sys
+import argparse
+
+#########
+# Input #
+#########
+
+
+def parse_args(argv):
+    """
+    Runtime args parser
+    """
+    parser = argparse.ArgumentParser("""""")
+
+    parser.add_argument(
+        "--download_dir",
+        help="",
+        type=str,
+        required=True,
+    )
+
+    parser.add_argument(
+        "--start_url",
+        help="",
+        type=str,
+        required=True,
+    )
+
+    parser.add_argument(
+        "--end_url",
+        help="",
+        type=str,
+        required=True,
+    )
+
+    args = parser.parse_args(argv[1:])
+
+    return args
+
+
+#############
+# Functions #
+#############
 
 
 def next_page(text):
@@ -25,7 +68,7 @@ def post(text, soup):
     return div
 
 
-def iterate_blog_pages(start_url, end_url, max_pages=10):
+def iterate_blog_pages(start_url, end_url, max_pages=1000):
     # load data
     def text_soup(url):
         r = requests.get(url)
@@ -34,10 +77,11 @@ def iterate_blog_pages(start_url, end_url, max_pages=10):
         return text, soup
 
     # initialize loop
-    text, soup = text_soup(start_url)
-    yield {"url": start_url, "text": text, "soup": soup}
+    url = start_url
+    text, soup = text_soup(url)
+    yield {"url": url, "text": text, "soup": soup}
     # loop over pages
-    for i in range(max_pages):
+    for _ in range(max_pages):
         if url == end_url:
             break
         url = next_page(text)
@@ -82,3 +126,12 @@ def main(download_dir, start_url, end_url):
         sleep(1)
 
     return "hello world"
+
+
+#################
+#     MAIN      #
+#################
+
+if __name__ == "main":
+    args = parse_args(sys.argv)
+    main(args.download_dir, args.start_url, args.end_url)
