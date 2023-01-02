@@ -52,10 +52,8 @@ def download_song(song_info: dict, download_dir: Path) -> Path:
 
     download_path = download_dir / song_info["Description"].replace("/", " ")
 
-    # download_path = yt_mp3_downloader.download(song_info["Link"], str(download_path(song_info)))
-
     info, download_path = yt_mp3_downloader.download(
-        "https://www.youtube.com/watch?v=tPEE9ZwTmy0", str(download_path)
+        song_info["Link"], str(download_path)
     )
 
     return info, download_path
