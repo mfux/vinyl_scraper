@@ -15,6 +15,8 @@ pip install --editable .
 # puts references to src code in env/lib/python3.9/site-packages/main.egg-link
 # the site-packages directory is the where the interpreter will look at first(?) when resolving an import
 
+sudo apt-get install ffmpeg
+# brew install ffmpeg
+
 # print package installations in env
 echo # print newline
-pip freeze
