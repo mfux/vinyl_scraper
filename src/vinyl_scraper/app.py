@@ -1,8 +1,10 @@
-from vinyl_scraper.legacy import link_extractor
+from vinyl_scraper.legacy import link_extractor, yt_mp3_downloader
+from vinyl_scraper.legacy.dbpextract import get_album
 import requests
 from bs4 import BeautifulSoup
 import re
 import io
+from pathlib import Path
 
 START_URL = "https://diebesondereplatte.blogspot.com/2022/12/die-besondere-platte-48-mit-simon-dorken.html"
 
@@ -45,5 +47,36 @@ def get_song_infos(page):
     return link_extractor.extract_infos(post(page["text"], page["soup"]))
 
 
+def download_song(song_info, download_dir):
+    path = Path(download_dir)
+
+    download_path = lambda si: download_dir / si["Description"].replace("/", " ")
+
+    # info = yt_mp3_downloader.download(song_info["Link"], str(download_path(song_info)))
+
+    info = yt_mp3_downloader.download(
+        "https://www.youtube.com/watch?v=tPEE9ZwTmy0", str(download_path(song_info))
+    )
+
+    return download_path + ".mp3"
+
+
 def main():
+    # for each page
+    for page in iterate_blog_pages(START_URL):
+
+        # get dj title
+        dj_title = get_album(page["url"])
+
+        # for song in page
+        for song_info in get_song_infos(page):
+            # download song
+
+            # determine download path
+
+            # download album art
+
+            # edit downloaded song info
+            print("hi")
+
     return "hello world"
