@@ -1,4 +1,4 @@
-from vinyl_scraper.legacy import dbpextract
+# from vinyl_scraper.legacy import dbpextract
 import requests
 
 START_URL = "https://diebesondereplatte.blogspot.com/2022/12/die-besondere-platte-48-mit-simon-dorken.html"

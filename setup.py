@@ -12,5 +12,7 @@ setup(
         "beautifulsoup4",
         "requests",
         "youtube_dl",
+        "eyed3",
+        "lxml",
     ],
 )
