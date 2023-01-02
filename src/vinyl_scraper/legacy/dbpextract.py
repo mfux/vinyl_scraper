@@ -17,6 +17,7 @@ from time import sleep
 from vinyl_scraper.legacy.link_extractor import extract_infos
 from vinyl_scraper.legacy.yt_mp3_downloader import download
 from vinyl_scraper.legacy.mp3_info_writer import write_info
+from vinyl_scraper.assets import page_number_artist_map
 import os
 from pathlib import Path
 
@@ -56,40 +57,7 @@ def get_html(page):
 
 
 def get_album(url):
-    nr_map = {
-        "32": "Timo Wiegand",
-        "31": "Nicolas Schröter & Simon Dörken",
-        "30": "Weller",
-        "29": "Arndt Jahraus",
-        "28": "Maya Hirsch",
-        "27": "New Age/New Space/Ambient Open Air",
-        "26": "Publikum Spezial",
-        "25": "Marius Schmidt",
-        "24": "James Dean Brown",
-        "23": "Koloman",
-        "22": "Lolo Blümler",
-        "21": "Nicolas Schröter/Hannes Michels/Simon Dörken",
-        "20": "Konstantin Papageorgiou",
-        "19": "Robert JazzMadass Lochmann",
-        "18": " Robert Herz (Okta Logue)",
-        "17": "Markos (Manges)",
-        "16": "Publikum Spezial",
-        "15": "Sven Helwig",
-        "14": "Daniele Iezzi",
-        "13": "Pedo Knopp",
-        "12": "Thur Deephrey",
-        "11": "Simon Dörken",
-        "10": "Christian Beetz",
-        "9": "For a Better Tomorrow",
-        "8": "Thomas Hammann",
-        "7": "Sommer Spezial im Osthang",
-        "6": "Jaques Tectile",
-        "5": "Hannes Michels",
-        "4": "Nicolas Schröter",
-        "3": "Benedikt Frey",
-        "2": "Philip Berg",
-        "1": "Simon Dörken",
-    }
+    nr_map = page_number_artist_map
     try:
         dbp_nr = [s for s in url.split("-") if s.isdigit()][-1]
     except IndexError:
@@ -102,36 +70,40 @@ def get_album(url):
     return result
 
 
-for i in range(1, 35):
-    if i == 3 or i == 8:
-        continue
-    tfn = "html/" + str(i) + ".html"
-    url, tfn = get_html(i)
-    with open(tfn, "r") as f:
-        infos = extract_infos(f)
+def main():
+    for i in range(1, 35):
+        if i == 3 or i == 8:
+            continue
+        tfn = "html/" + str(i) + ".html"
+        url, tfn = get_html(i)
+        with open(tfn, "r") as f:
+            infos = extract_infos(f)
 
-        for info in infos:
-            info["Album"] = get_album(url)
-            print("File: " + info["Description"] + "...")
-            if Path("mp3/" + info["Description"].replace("/", " ") + ".mp3").exists():
+            for info in infos:
+                info["Album"] = get_album(url)
+                print("File: " + info["Description"] + "...")
+                if Path(
+                    "mp3/" + info["Description"].replace("/", " ") + ".mp3"
+                ).exists():
+                    try:
+                        write_info(
+                            info,
+                            "mp3/" + info["Description"].replace("/", " ") + ".mp3",
+                        )
+                    except (IOError, AttributeError, IndexError):
+                        continue
+                    continue
+                try:
+                    yt_info = download(
+                        info["Link"], "mp3/" + info["Description"].replace("/", " ")
+                    )
+                except:
+                    continue
+                info["yt_info"] = yt_info
                 try:
                     write_info(
                         info, "mp3/" + info["Description"].replace("/", " ") + ".mp3"
                     )
                 except (IOError, AttributeError, IndexError):
                     continue
-                continue
-            try:
-                yt_info = download(
-                    info["Link"], "mp3/" + info["Description"].replace("/", " ")
-                )
-            except:
-                continue
-            info["yt_info"] = yt_info
-            try:
-                write_info(
-                    info, "mp3/" + info["Description"].replace("/", " ") + ".mp3"
-                )
-            except (IOError, AttributeError, IndexError):
-                continue
-            sleep(1)
+                sleep(1)
