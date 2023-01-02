@@ -41,7 +41,10 @@ def get_title(info):
         + list(d)[4:]
     )
     d = d.strip()
-    artist = d.split("-")[1].strip()
+    try:
+        artist = d.split("-")[1].strip()
+    except IndexError:
+        artist = "unknown"
     return artist
 
 
