@@ -46,7 +46,7 @@ def get_title(info):
 
 def write_info(info, tfn, jpeg=False):
     filetype = info["Image"].split(".")[-1]
-    img_tfn = 'img/' + info["Description"] + "." + filetype
+    img_tfn = "img/" + info["Description"] + "." + filetype
     try:
         get_img(info["Image"], img_tfn)
         r = check_output(['eyeD3', '--add-image', ':'.join([img_tfn, "FRONT_COVER"]), tfn])
