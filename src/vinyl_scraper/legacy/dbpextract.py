@@ -57,7 +57,7 @@ def get_html(page):
 
 
 def get_album(url):
-    nr_map = page_number_artist_map
+    nr_map = page_number_artist_map()
     try:
         dbp_nr = [s for s in url.split("-") if s.isdigit()][-1]
     except IndexError:
