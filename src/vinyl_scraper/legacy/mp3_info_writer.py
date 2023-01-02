@@ -49,7 +49,9 @@ def write_info(info, tfn, jpeg=False):
     img_tfn = "img/" + info["Description"] + "." + filetype
     try:
         get_img(info["Image"], img_tfn)
-        r = check_output(['eyeD3', '--add-image', ':'.join([img_tfn, "FRONT_COVER"]), tfn])
+        r = check_output(
+            ["eyeD3", "--add-image", ":".join([str(img_tfn), "FRONT_COVER"]), tfn]
+        )
         print(r)
     except:
         pass
