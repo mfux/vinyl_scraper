@@ -36,7 +36,7 @@ def iterate_blog_pages(start_url, max_pages=10):
 
     # initialize loop
     text, soup = text_soup(start_url)
-    yield {"url": START_URL, "text": text, "soup": soup}
+    yield {"url": start_url, "text": text, "soup": soup}
     # loop over pages
     for i in range(max_pages):
         url = next_page(text)
