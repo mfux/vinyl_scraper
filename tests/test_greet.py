@@ -7,5 +7,5 @@ def test_main():
 
 
 def test_iterate_blog_pages():
-    text = iterate_blog_pages(vinyl_scraper.START_URL)
-    assert False
+    urls = iterate_blog_pages(vinyl_scraper.START_URL, max_pages=2)
+    assert all("http" in url for url in urls)
