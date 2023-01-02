@@ -14,10 +14,11 @@ def download(url, tfn) -> Path:
             }
         ],
     }
-    if Path(tfn).exists():
-        return tfn
+    download_path = Path(str(tfn) + ".mp3")
+    if Path(download_path).exists():
+        return info, download_path
     with YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
         if info["duration"] <= 20 * 60:
             ydl.download([url])
-    return info, Path(str(tfn) + ".mp3")
+    return info, download_path
