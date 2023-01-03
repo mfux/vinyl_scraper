@@ -105,21 +105,34 @@ def vinyl_scrape(download_dir: str, start_url: str, end_url: str) -> int:
         for song_info in get_song_infos(page):
             # download song #
 
+            url = song_info["Link"]
+
             # create filename
             dl_path = lambda: str(
-                download_dir / (song_info["Description"].replace("/", " ") + ".mp3")
+                Path(download_dir)
+                / (song_info["Description"].replace("/", " ") + ".mp3")
             )
             # define download method
             download = lambda: yt_mp3_downloader.download(
-                song_info["Link"], dl_path()[:-4]
+                url, dl_path()[:-4]
+            )  # dl_path()[:-4]) to cut off the .mp3 file extension in the dl_path
+
+            # define info fetch method
+            yt_info = lambda: yt_mp3_downloader.video_info(
+                url, dl_path()[:-4]
             )  # dl_path()[:-4]) to cut off the .mp3 file extension in the dl_path
 
             try:
                 # check if file exists
-                if dl_path().exists():
+                if Path(dl_path()).exists():
                     raise FileExistsError
+
+                # save video info
+                song_info["yt_info"] = yt_info()
+
                 # execute download
                 download()
+
             except DownloadError:
                 # handle the case that the download from youtube failed
                 continue
