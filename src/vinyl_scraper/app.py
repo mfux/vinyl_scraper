@@ -82,7 +82,7 @@ def iterate_blog_pages(start_url, end_url, max_pages=1000):
     text, soup = text_soup(url)
     yield {"url": url, "text": text, "soup": soup}
     # loop over pages
-    for _ in range(max_pages):
+    for _ in range(max_pages - 1):
         if url == end_url:
             break
         url = next_page(text)
@@ -94,17 +94,6 @@ def get_song_infos(page):
     return link_extractor.extract_infos(post(page["text"], page["soup"]))
 
 
-def download_song(song_info: dict, download_dir: Path) -> Path:
-
-    download_path = download_dir / song_info["Description"].replace("/", " ")
-
-    info, download_path = yt_mp3_downloader.download(
-        song_info["Link"], str(download_path)
-    )
-
-    return info, download_path
-
-
 def vinyl_scrape(download_dir: str, start_url: str, end_url: str) -> int:
     # for each page
     for page in iterate_blog_pages(start_url, end_url):
@@ -114,17 +103,33 @@ def vinyl_scrape(download_dir: str, start_url: str, end_url: str) -> int:
 
         # for song in page
         for song_info in get_song_infos(page):
-            # download song
+            # download song #
+
+            # create filename
+            dl_path = lambda: str(
+                download_dir / (song_info["Description"].replace("/", " ") + ".mp3")
+            )
+            # define download method
+            download = lambda: yt_mp3_downloader.download(
+                song_info["Link"], dl_path()[:-4]
+            )  # dl_path()[:-4]) to cut off the .mp3 file extension in the dl_path
+
             try:
-                song_info["yt_info"], download_path = download_song(
-                    song_info, Path(download_dir)
-                )
+                # check if file exists
+                if dl_path().exists():
+                    raise FileExistsError
+                # execute download
+                download()
             except DownloadError:
+                # handle the case that the download from youtube failed
+                continue
+            except FileExistsError:
+                # handle the case that the file exists on disk
                 continue
 
-            # edit downloaded song info
+            # edit downloaded song info #
             song_info["Album"] = dj_title
-            write_info(song_info, download_path)
+            write_info(song_info, dl_path())
 
         # throttle requests
         sleep(1)
