@@ -22,21 +22,21 @@ def parse_args(argv):
     parser = argparse.ArgumentParser("""""")
 
     parser.add_argument(
-        "--download_dir",
+        "--download-dir",
         help="",
         type=str,
         required=True,
     )
 
     parser.add_argument(
-        "--start_url",
+        "--start-url",
         help="",
         type=str,
         required=True,
     )
 
     parser.add_argument(
-        "--end_url",
+        "--end-url",
         help="",
         type=str,
         required=True,
@@ -133,6 +133,11 @@ def vinyl_scrape(download_dir: str, start_url: str, end_url: str) -> int:
 #################
 
 
-def main(*argv):
-    args = parse_args(argv)
+def main():
+    # parse args
+    args = parse_args(sys.argv)
     return vinyl_scrape(args.download_dir, args.start_url, args.end_url)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
