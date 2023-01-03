@@ -9,6 +9,7 @@ from pathlib import Path
 from time import sleep
 import sys
 import argparse
+from youtube_dl.utils import DownloadError
 
 #########
 # Input #
@@ -114,9 +115,12 @@ def vinyl_scrape(download_dir: str, start_url: str, end_url: str) -> int:
         # for song in page
         for song_info in get_song_infos(page):
             # download song
-            song_info["yt_info"], download_path = download_song(
-                song_info, Path(download_dir)
-            )
+            try:
+                song_info["yt_info"], download_path = download_song(
+                    song_info, Path(download_dir)
+                )
+            except DownloadError:
+                continue
 
             # edit downloaded song info
             song_info["Album"] = dj_title
