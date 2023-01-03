@@ -104,7 +104,7 @@ def download_song(song_info: dict, download_dir: Path) -> Path:
     return info, download_path
 
 
-def main(download_dir, start_url, end_url):
+def vinyl_scrape(download_dir: str, start_url: str, end_url: str) -> int:
     # for each page
     for page in iterate_blog_pages(start_url, end_url):
 
@@ -125,13 +125,14 @@ def main(download_dir, start_url, end_url):
         # throttle requests
         sleep(1)
 
-    return "hello world"
+    return 0
 
 
 #################
 #     MAIN      #
 #################
 
-if __name__ == "main":
-    args = parse_args(sys.argv)
-    main(args.download_dir, args.start_url, args.end_url)
+
+def main(*argv):
+    args = parse_args(argv)
+    return vinyl_scrape(args.download_dir, args.start_url, args.end_url)

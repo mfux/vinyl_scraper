@@ -22,6 +22,6 @@ setup(
         "lxml",
     ],
     entry_points={
-        "console_scripts": ["vinyl-scrap=vinyl_scraper.app:main"],
+        "console_scripts": ["vinyl-scrape=vinyl_scraper.app:main"],
     },
 )
