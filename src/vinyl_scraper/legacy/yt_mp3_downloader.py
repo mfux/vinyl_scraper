@@ -1,6 +1,5 @@
-from youtube_dl import YoutubeDL
+from yt_dlp import YoutubeDL
 from pathlib import Path
-
 
 ydl_opts = lambda tfn: {
     "format": "bestaudio/best",

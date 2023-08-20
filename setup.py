@@ -17,7 +17,7 @@ setup(
         "black==22.10.0",
         "beautifulsoup4",
         "requests",
-        "youtube_dl",
+        "yt-dlp",
         "eyed3",
         "lxml",
     ],

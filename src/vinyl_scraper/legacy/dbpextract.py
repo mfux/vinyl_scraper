@@ -18,7 +18,6 @@ from vinyl_scraper.legacy.link_extractor import extract_infos
 from vinyl_scraper.legacy.yt_mp3_downloader import download
 from vinyl_scraper.legacy.mp3_info_writer import write_info
 from vinyl_scraper.assets import page_number_artist_map
-import os
 from pathlib import Path
 
 
